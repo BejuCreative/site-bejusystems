@@ -1,3 +1,5 @@
+/* --sl tilts the two devices as you scroll. Not inherited, so changing it restyles the device frame only, not the ~2,600 parts inside it */
+@property --sl{syntax:'<number>';inherits:false;initial-value:.5}
 /* Beju Creative systems page: hero, the scroll-driven system rig, and the offer sections.
    Loads after /base.css and /pages.css. Animation = transform + opacity only. */
 

@@ -26,23 +26,25 @@
 
   // ---- the system rig
   const rig = document.getElementById('rig');
-  let measure = () => {}, update = () => {};
+  let measure = () => {}, update = () => {}, liveY = sy();
   if (rig) {
     const cv = rig.querySelector('.cv'), box = rig.querySelector('.rig-box'), map = rig.querySelector('.map');
     const devs = [...rig.querySelectorAll('.dev-in')];
     const steps = [...document.querySelectorAll('.st')], N = steps.length;
     const scenes = [...rig.querySelectorAll('.scr')].map(el => ({
-      el, k: +el.dataset.k - 1, hops: +el.dataset.hops || 0, h: -1,
+      el, k: +el.dataset.k - 1, hops: +el.dataset.hops || 0, h: -1, sv: '',
+      // --s goes only on the few parts that read it: set on the whole scene, it restyled every child each frame
+      us: [...el.querySelectorAll('.sh-prog i,.mm-ph,.ed-ph,.seq-line>i,.rep-line')],
       ats: [...el.querySelectorAll('[data-at]')].map(e => ({ e, a: +e.dataset.at, b: e.dataset.to ? +e.dataset.to : 9, on: null }))
     }));
     const nodes = [...rig.querySelectorAll('.map-nodes li')];
     const rcN = rig.querySelector('.rc-n'), rcT = rig.querySelector('.rc-t'), rt = rig.querySelector('.rt');
     const mq = matchMedia('(max-width:899px)');
-    let tops = [], dens = [], thr = 0, cur = -1, start0 = 0;
+    let tops = [], dens = [], thr = 0, cur = -1, start0 = 0, slv = '';
 
     // a scene at local progress s: items appear at data-at, leave at data-to; cards hop between columns
     const apply = (o, s) => {
-      o.el.style.setProperty('--s', s.toFixed(4));
+      const sv = s.toFixed(4); if (o.sv !== sv) { o.sv = sv; o.us.forEach(u => u.style.setProperty('--s', sv)); }
       for (const t of o.ats) { const on = s >= t.a && s < t.b; if (t.on !== on) { t.on = on; t.e.classList.toggle('in', on); } }
       if (o.hops) { const h = Math.min(o.hops, Math.floor(s * (o.hops + 1))); if (o.h !== h) { o.h = h; o.el.style.setProperty('--hop', h); } }
     };
@@ -54,10 +56,11 @@
       nodes.forEach((n, k) => { n.classList.toggle('lit', k < i); n.classList.toggle('cur', k === i); });
       rcN.textContent = String(i + 1).padStart(2, '0'); rcT.textContent = st.dataset.name;
       if (rt) { rt.firstElementChild.textContent = st.querySelector('h3').textContent; rt.lastElementChild.textContent = st.querySelector('.st-next').textContent; }
-      rig.classList.remove('tick'); void rig.offsetWidth; rig.classList.add('tick');
+      // restart the tick animation on the next frame (reading offsetWidth here forced a full layout mid-scroll)
+      rig.classList.remove('tick'); requestAnimationFrame(() => rig.classList.add('tick'));
     };
     measure = () => {
-      const vh = innerHeight, y = sy(), rh = rig.offsetHeight;
+      const vh = innerHeight, y = sy(), rh = rig.offsetHeight; liveY = y;
       // the line a step's words must cross to take over the stage
       thr = mq.matches ? rh + (vh - rh) * .45 : vh * .5;
       tops = steps.map(s => s.getBoundingClientRect().top + y);
@@ -67,13 +70,13 @@
       dens[0] = Math.max(1, (start0 - thr + steps[0].offsetHeight) * .9);
       rig.style.setProperty('--fit', Math.min(box.clientWidth / cv.offsetWidth, box.clientHeight / cv.offsetHeight).toFixed(4));
     };
-    update = () => {
-      const y = sy(); let i = 0;
+    update = (y = sy()) => {
+      let i = 0;
       for (let k = 0; k < N; k++) if (tops[k] - y <= thr) i = k;
       const s = clamp(((i ? thr : start0) - (tops[i] - y)) / dens[i], 0, 1);
       if (i !== cur) setStep(i);
       scenes.forEach(o => { if (o.k === i) apply(o, s); });
-      devs.forEach(d => d.style.setProperty('--sl', s.toFixed(3)));
+      const sl = s.toFixed(3); if (sl !== slv) { slv = sl; devs.forEach(d => d.style.setProperty('--sl', sl)); }
       map.style.setProperty('--mp', clamp((i + s) / (N - 1), 0, 1).toFixed(4));
       map.style.setProperty('--loop', i === N - 1 ? clamp((s - .35) * 4, 0, 1).toFixed(3) : 0);
     };
@@ -92,20 +95,33 @@
 
   // ---- engagement timeline: the line draws as you scroll past it
   const eng = document.getElementById('eng');
-  const drawEng = () => { if (!eng) return; const r = eng.getBoundingClientRect(); eng.style.setProperty('--e', clamp((innerHeight * .7 - r.top) / r.height, 0, 1).toFixed(3)); };
+  // its place is measured with everything else, so a scroll frame only writes, never reads layout
+  let engTop = 0, engH = 1, engV = '';
+  const measureEng = () => { if (!eng) return; const r = eng.getBoundingClientRect(); engTop = r.top + sy(); engH = Math.max(1, r.height); };
+  const drawEng = y => { if (!eng) return; const v = clamp((innerHeight * .7 - (engTop - y)) / engH, 0, 1).toFixed(3); if (v !== engV) { engV = v; eng.style.setProperty('--e', v); } };
 
-  let raf = 0;
-  const frame = () => { raf = 0; update(); drawEng(); };
+  // the rig follows a smoothed scroll position (time based, ~75 ms), so wheel steps and flings scrub smoothly
+  let raf = 0, ys = null, prevT = 0;
+  // liveY is set in the scroll event, where layout is clean; reading scrollY inside a frame after other writes forces a layout
+  const frame = now => {
+    raf = 0;
+    const y = liveY, dt = prevT && now ? Math.min(64, now - prevT) : 16; prevT = now || 0;
+    if (ys === null || demo || Math.abs(y - ys) > innerHeight * 1.5) ys = y;   // first frame or a long jump: no slow catch-up
+    else ys += (y - ys) * (1 - Math.exp(-dt / 75));
+    if (Math.abs(y - ys) < .5) ys = y;
+    update(ys); drawEng(y);
+    if (ys !== y) req(); else prevT = 0;
+  };
   const req = () => { if (!raf) raf = requestAnimationFrame(frame); };
-  const all = () => { fitHero(); measure(); frame(); };
-  scroller.addEventListener('scroll', req, { passive: true });
+  const all = () => { fitHero(); liveY = sy(); measure(); measureEng(); ys = null; frame(); };
+  scroller.addEventListener('scroll', () => { liveY = sy(); req(); }, { passive: true });
   addEventListener('resize', all);
   if ('ResizeObserver' in window) new ResizeObserver(all).observe(document.querySelector('main'));
   if (document.fonts) document.fonts.ready.then(all);
   all();
 
   if (Q.has('go')) {
-    const go = () => { const el = document.getElementById(Q.get('go')); if (el) { body.scrollTop = el.getBoundingClientRect().top + body.scrollTop; frame(); } };
+    const go = () => { const el = document.getElementById(Q.get('go')); if (el) { body.scrollTop = el.getBoundingClientRect().top + body.scrollTop; liveY = sy(); ys = null; frame(); } };
     addEventListener('load', () => { go(); setTimeout(go, 250); setTimeout(go, 800); });
     addEventListener('resize', go);
   }
