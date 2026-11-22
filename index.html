@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sales Systems for Coaches and Experts | Beju Creative</title>
-<meta name="description" content="We build and run the whole system behind your offer: content, lead capture, emails, booking and a CRM that shows every lead and sale in one place.">
+<meta name="description" content="We build and run the whole sales system behind your offer: Shorts, a DM keyword funnel, email sequences, sales pages and booking, your CRM and weekly numbers.">
 <meta name="robots" content="noindex,follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Beju Creative">
 <meta property="og:title" content="Content that turns into sales">
-<meta property="og:description" content="Content, lead capture, emails, booking and your CRM. Built and run by one team, improved every week.">
+<meta property="og:description" content="Shorts, a DM keyword funnel, emails, sales pages, booking and your CRM. Built and run by one team, tuned every week.">
 <meta property="og:image" content="https://bejucreative.digital/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#070805">
@@ -20,77 +20,582 @@
 <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/base.css">
 <link rel="stylesheet" href="/pages.css">
+<link rel="stylesheet" href="/system.css">
 <noscript><style>.rv{opacity:1!important;transform:none!important}.split .w>span{opacity:1!important;transform:none!important}</style></noscript>
-<style>.head .link{justify-self:start}
-@media(min-width:980px){.cols>.list .item h3{font-size:clamp(28px,3vw,42px)}}
-.item.plain{cursor:default}.item.plain:hover{padding-left:0}</style>
 </head>
 <body>
 <canvas id="bg" aria-hidden="true"></canvas><div class="grain"></div>
 <div id="tl" aria-hidden="true"><i id="ph"></i><span id="tc">00:00:00:00</span></div>
 
+<!-- line icons, drawn once and reused -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 12h1.5M7 8v8M11 4v16M15 8.5v7M19 10.5v3M21.5 12H20"/></symbol>
+  <symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.2 8.2 20 20M8.2 15.8 20 4"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-page" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V13M9.5 20V9M15 20v-5M20.5 20V5M2 20h20"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.2a4.2 4.2 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8S10.5 3.5 7.6 4.6 9.5 8 12 8zm0 0s1.5-4.5 4.4-3.4S14.5 8 12 8z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8" r="1.4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3M18 3v4h-4M6 21v-4h4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+</svg>
+
 <nav class="nav" aria-label="Main">
   <a class="brand" href="./"><img data-mark src="/assets/beju-mark-640.png" alt="Beju Creative" width="40" height="24"></a>
-  <a class="l" href="#build">What we build</a><a class="l" href="#how">How it works</a><a class="l" href="#faq">Questions</a>
+  <a class="l" href="#system">The system</a><a class="l" href="#build">What we build</a><a class="l" href="#engagement">How it runs</a><a class="l" href="#faq">Questions</a>
   <a class="btn primary sm" href="https://cal.com/beju-creative/15min-call" data-magnet>Book a call</a>
 </nav>
 
 <main>
-<header class="phero">
-  <div class="wrap">
-    <h1 class="split">Content that turns into <em>sales.</em></h1>
-    <p class="lede rv" style="--i:3;max-width:38em">We build and run the whole system behind your offer: the content, the lead capture, the emails, the booking and a CRM that shows every lead and sale in one place. One team, improved every week.</p>
-    <div class="row rv" style="--i:4">
-      <a class="btn primary" href="https://cal.com/beju-creative/15min-call" data-magnet>Book a call to map your funnel</a>
-      <a class="btn glass" href="#build" data-magnet>See what we build</a>
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="kick rv"><span class="live"></span>Sales systems for coaches, experts and creators</p>
+      <h1 class="split">Content that turns into <em>sales.</em></h1>
+      <p class="lede rv" style="--i:3">We build and run the whole machine behind your offer. Shorts that stop the scroll. A DM funnel that turns comments into leads. Emails that bring those leads to a call. A CRM that tracks every lead and every sale. One team runs all of it, and tunes it every week.</p>
+      <div class="row rv" style="--i:4">
+        <a class="btn primary" href="https://cal.com/beju-creative/15min-call" data-magnet>Book a call to map your funnel</a>
+        <a class="btn glass" href="#system" data-magnet>See the system</a>
+      </div>
     </div>
+
+    <div class="hero-vis rv" style="--i:2" aria-hidden="true"><div class="hv-cv">
+      <div class="hv-glow"></div>
+      <div class="hv-phone"><div class="hv-float">
+        <div class="ph-body"><div class="ph-scr">
+          <i class="ph-island"></i>
+          <div class="sh">
+            <div class="sh-bg"><i class="sh-person"></i></div>
+            <div class="sh-prog"><i></i></div>
+            <div class="sh-hook">3 pricing mistakes<br>costing you clients</div>
+            <div class="sh-caps hv-caps"><span>Stop <b>pricing</b></span><span>by the <b>hour.</b></span><span>Price the <b>result.</b></span></div>
+            <div class="sh-rail"><svg><use href="#i-heart"/></svg><svg><use href="#i-chat"/></svg><svg><use href="#i-send"/></svg></div>
+            <div class="sh-foot"><b>@yourbrand</b><span>Comment <small>PLAN</small> for the free guide</span></div>
+          </div>
+        </div></div>
+      </div></div>
+      <div class="hv-flow">
+        <i class="hv-line"><b></b></i>
+        <div class="hv-chip" style="--k:0"><i class="ic"><svg><use href="#i-chat"/></svg></i><div><b>New comment: PLAN</b><span>On today's Short</span></div></div>
+        <div class="hv-chip" style="--k:1"><i class="ic"><svg><use href="#i-gift"/></svg></i><div><b>Guide sent in DM</b><span>Instantly, to everyone who asks</span></div></div>
+        <div class="hv-chip" style="--k:2"><i class="ic"><svg><use href="#i-mail"/></svg></i><div><b>Email captured</b><span>Welcome sequence started</span></div></div>
+        <div class="hv-chip" style="--k:3"><i class="ic"><svg><use href="#i-cal"/></svg></i><div><b>Call booked</b><span>From the invitation email</span></div></div>
+        <div class="hv-chip" style="--k:4"><i class="ic"><svg><use href="#i-board"/></svg></i><div><b>New client</b><span>Logged in your CRM</span></div></div>
+      </div>
+    </div></div>
   </div>
 </header>
 
-<section class="act" id="build"><div class="wrap cols">
-  <div class="head stick"><h2 class="split">What we build and run.</h2><p class="lede rv">Every part of the path from the first view to the sale.</p></div>
+<section class="strip" aria-label="About us"><div class="wrap facts">
+  <div class="fact rv"><span>Worked with</span><b>Sam Zia's team and <i class="based">BASED</i></b></div>
+  <div class="fact rv" style="--i:1"><span>Runs on</span><b>The same system as our own studio</b></div>
+  <div class="fact rv" style="--i:2"><span>Strategy</span><b>Done with you</b></div>
+  <div class="fact rv" style="--i:3"><span>Execution</span><b>Done for you</b></div>
+</div></section>
+
+<!-- ============ THE SYSTEM, END TO END ============ -->
+<section class="sys act" id="system">
+  <div class="wrap">
+    <div class="head sys-head">
+      <p class="eyebrow rv">The system, end to end</p>
+      <h2 class="split">From a stranger's scroll to a <em>signed client.</em></h2>
+      <p class="lede rv">Eight stages. One team. Each stage hands the lead to the next, so nobody falls through the gaps. Scroll through it: this is what happens between someone watching your Short and buying your offer.</p>
+      <ol class="sys-chips rv" aria-label="The eight stages">
+        <li>Moments</li><li>Shorts</li><li>Posting</li><li>DM funnel</li><li>Emails</li><li>Booking</li><li>CRM</li><li>Numbers</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="wrap run" id="run">
+    <!-- the sticky stage: a phone and a dashboard that change with every step -->
+    <div class="rig" id="rig" aria-hidden="true" data-step="1" data-lead="laptop">
+      <div class="rig-box"><div class="cv">
+        <div class="aura"></div>
+        <div class="rc"><b class="rc-n">01</b><span>/ 08</span><small class="rc-t">Moments</small></div>
+        <div class="rt"><b>We mine your best moments.</b><span>The strongest moments go straight to the edit.</span></div>
+
+        <!-- ===== the dashboard ===== -->
+        <div class="dev lp"><div class="dev-in">
+          <div class="lp-win">
+            <div class="lp-bar"><i></i><i></i><i></i><span>yourbrand · system</span></div>
+            <div class="lp-body">
+              <div class="lp-side"><b class="lp-ind"></b>
+                <svg><use href="#i-wave"/></svg><svg><use href="#i-cut"/></svg><svg><use href="#i-cal"/></svg><svg><use href="#i-chat"/></svg><svg><use href="#i-mail"/></svg><svg><use href="#i-page"/></svg><svg><use href="#i-board"/></svg><svg><use href="#i-chart"/></svg>
+              </div>
+              <div class="lp-main">
+
+                <!-- L1 moment map -->
+                <div class="scr" data-k="1">
+                  <div class="l-head"><span class="u-h">Moment map</span><span class="u-chip"><i class="dot-live"></i>Scanning long-form</span></div>
+                  <div class="mm">
+                    <div class="mm-frame"><i class="mm-person"></i><span class="mm-tag">Long-form</span><span class="mm-tc">00:41:12</span></div>
+                    <div class="mm-rank">
+                      <div class="mm-row" data-at=".47"><b>#1</b><p>“Price the result, not the hour.”</p><i class="mt"><i style="--v:.96"></i></i></div>
+                      <div class="mm-row" data-at=".18"><b>#2</b><p>“The question I ask every new client.”</p><i class="mt"><i style="--v:.84"></i></i></div>
+                      <div class="mm-row" data-at=".74"><b>#3</b><p>“Why your first offer should be small.”</p><i class="mt"><i style="--v:.77"></i></i></div>
+                    </div>
+                  </div>
+                  <div class="mm-tl">
+                    <div class="mm-times"><span>00:00</span><span>15:00</span><span>30:00</span><span>45:00</span><span>58:40</span></div>
+                    <div class="mm-wave" data-wave="140"></div>
+                    <div class="mm-seg" style="--x:.18;--w:.08" data-at=".18"><span>#2</span></div>
+                    <div class="mm-seg top" style="--x:.47;--w:.065" data-at=".47"><span>#1</span></div>
+                    <div class="mm-seg" style="--x:.74;--w:.07" data-at=".74"><span>#3</span></div>
+                    <i class="mm-ph"></i>
+                  </div>
+                </div>
+
+                <!-- L2 edit timeline -->
+                <div class="scr" data-k="2">
+                  <div class="l-head"><span class="u-h">Edit · Short 01</span><span class="u-chip">Hook first</span></div>
+                  <div class="ed">
+                    <div class="ed-ruler"><span>0s</span><span>5s</span><span>10s</span><span>15s</span><span>20s</span><span>25s</span></div>
+                    <div class="trk"><span>Hook</span><div class="lane"><i class="clip gold" style="--x:0;--w:.12">Hook</i></div></div>
+                    <div class="trk"><span>Video</span><div class="lane"><i class="clip" style="--x:0;--w:.3"></i><i class="clip" style="--x:.31;--w:.27"></i><i class="clip" style="--x:.59;--w:.41"></i></div></div>
+                    <div class="trk"><span>Graphics</span><div class="lane"><i class="clip g2" style="--x:.04;--w:.18" data-at=".1">Title</i><i class="clip g2" style="--x:.36;--w:.2" data-at=".35">Key line</i><i class="clip g2" style="--x:.66;--w:.16" data-at=".6">Zoom</i><i class="clip gold" style="--x:.86;--w:.14" data-at=".8">End card</i></div></div>
+                    <div class="trk"><span>Captions</span><div class="lane caps"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                    <div class="trk"><span>Sound</span><div class="lane"><i class="clip snd" style="--x:0;--w:1">Music bed</i><i class="clip sfx" style="--x:.12;--w:.03"></i><i class="clip sfx" style="--x:.58;--w:.03"></i><i class="clip sfx" style="--x:.9;--w:.04"></i></div></div>
+                    <i class="ed-ph"></i>
+                  </div>
+                  <div class="l-foot"><span class="u-chip">Re-framed for vertical</span><span class="u-chip">Captions, one line</span><span class="u-chip">One call to action</span></div>
+                </div>
+
+                <!-- L3 posting calendar -->
+                <div class="scr" data-k="3">
+                  <div class="l-head"><span class="u-h">Content calendar · this week</span><span class="u-chip">Planned around your offer</span></div>
+                  <div class="cal">
+                    <div class="cal-col"><b>Mon</b><i class="tile" data-at=".04"><i class="th a"></i><span>08:00</span><small><i class="d1"></i><i class="d2"></i><i class="d3"></i></small></i><i class="tile" data-at=".28"><i class="th b"></i><span>18:30</span><small><i class="d1"></i><i class="d2"></i></small></i></div>
+                    <div class="cal-col"><b>Tue</b><i class="tile" data-at=".1"><i class="th c"></i><span>12:15</span><small><i class="d1"></i><i class="d3"></i></small></i></div>
+                    <div class="cal-col"><b>Wed</b><i class="tile" data-at=".16"><i class="th b"></i><span>08:00</span><small><i class="d1"></i><i class="d2"></i><i class="d3"></i></small></i><i class="tile" data-at=".4"><i class="th a"></i><span>19:00</span><small><i class="d1"></i><i class="d2"></i></small></i></div>
+                    <div class="cal-col"><b>Thu</b><i class="tile" data-at=".22"><i class="th c"></i><span>12:15</span><small><i class="d1"></i><i class="d2"></i><i class="d3"></i></small></i></div>
+                    <div class="cal-col"><b>Fri</b><i class="tile" data-at=".34"><i class="th a"></i><span>08:00</span><small><i class="d1"></i><i class="d3"></i></small></i><i class="tile" data-at=".52"><i class="th b"></i><span>17:45</span><small><i class="d1"></i><i class="d2"></i></small></i></div>
+                    <div class="cal-col"><b>Sat</b><i class="tile" data-at=".46"><i class="th c"></i><span>10:30</span><small><i class="d1"></i><i class="d2"></i></small></i></div>
+                    <div class="cal-col"><b>Sun</b><i class="tile" data-at=".58"><i class="th b"></i><span>18:00</span><small><i class="d1"></i><i class="d2"></i><i class="d3"></i></small></i></div>
+                  </div>
+                  <div class="l-foot legend"><span><i class="d1"></i>Vertical feed</span><span><i class="d2"></i>Video search</span><span><i class="d3"></i>Professional network</span><span class="u-chip ok" data-at=".7"><svg><use href="#i-check"/></svg>Week scheduled</span></div>
+                </div>
+
+                <!-- L4 DM funnel flow -->
+                <div class="scr" data-k="4">
+                  <div class="l-head"><span class="u-h">DM keyword funnel</span><span class="u-chip"><i class="dot-live"></i>Live</span></div>
+                  <div class="flow">
+                    <div class="fn" data-at=".02"><i class="ic"><svg><use href="#i-chat"/></svg></i><b>Comment “PLAN”</b><span>On any Short</span></div>
+                    <i class="fc" data-at=".18"></i>
+                    <div class="fn" data-at=".18"><i class="ic"><svg><use href="#i-bolt"/></svg></i><b>Instant DM + gift</b><span>Free guide, sent to everyone</span></div>
+                    <i class="fc" data-at=".34"></i>
+                    <div class="fn" data-at=".34"><i class="ic"><svg><use href="#i-heart"/></svg></i><b>Follow invited</b><span>Never required</span></div>
+                    <svg class="fturn" viewBox="0 0 480 40" preserveAspectRatio="none" data-at=".5"><path d="M410 0 C410 26 70 14 70 40"/></svg>
+                    <div class="fn" data-at=".5"><i class="ic"><svg><use href="#i-send"/></svg></i><b>“Want the full version?”</b><span>One question</span></div>
+                    <i class="fc" data-at=".66"></i>
+                    <div class="fn" data-at=".66"><i class="ic"><svg><use href="#i-mail"/></svg></i><b>Email captured</b><span>A lead you own</span></div>
+                    <i class="fc" data-at=".8"></i>
+                    <div class="fn hot" data-at=".8"><i class="ic"><svg><use href="#i-tag"/></svg></i><b>Tagged: PLAN</b><span>Into the email engine</span></div>
+                  </div>
+                </div>
+
+                <!-- L5 email engine -->
+                <div class="scr" data-k="5">
+                  <div class="l-head"><span class="u-h">Email engine</span><span class="u-chip">Segmented by what they asked for</span></div>
+                  <div class="seq">
+                    <div class="seq-seg">
+                      <span class="u-h">Segments</span>
+                      <i class="on"><svg><use href="#i-tag"/></svg>Asked for PLAN</i>
+                      <i><svg><use href="#i-tag"/></svg>Asked for SCRIPT</i>
+                      <i><svg><use href="#i-tag"/></svg>Webinar sign-ups</i>
+                      <i><svg><use href="#i-tag"/></svg>Past buyers</i>
+                    </div>
+                    <div class="seq-flow">
+                      <i class="seq-line"><i></i></i>
+                      <div class="sq" data-at=".04"><small>Day 0</small><span class="ty w">Welcome</span><p>Your guide is inside (start on page 2)</p><b class="stt">Sent</b></div>
+                      <div class="sq" data-at=".22"><small>Day 1</small><span class="ty n">Nurture</span><p>The pricing mistake I made for years</p><b class="stt">Sent</b></div>
+                      <div class="sq" data-at=".4"><small>Day 3</small><span class="ty n">Nurture</span><p>What a client asked me last week</p><b class="stt">Sent</b></div>
+                      <div class="sq" data-at=".58"><small>Day 5</small><span class="ty n">Story</span><p>Why I stopped selling my hours</p><b class="stt go">Sending</b></div>
+                      <div class="sq" data-at=".76"><small>Day 7</small><span class="ty i">Invitation</span><p>Want help putting this in place?</p><b class="stt sc">Scheduled</b></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- L6 sales page + booking -->
+                <div class="scr" data-k="6">
+                  <div class="sp">
+                    <div class="sp-page">
+                      <div class="sp-url"><i></i>yourbrand.com/program</div>
+                      <span class="sp-k">The Pricing Program</span>
+                      <h4>Charge for the result, not the <em>hour.</em></h4>
+                      <ul><li data-at=".08"><svg><use href="#i-check"/></svg>Who it's for</li><li data-at=".16"><svg><use href="#i-check"/></svg>What changes for you</li><li data-at=".24"><svg><use href="#i-check"/></svg>How it works, step by step</li><li data-at=".32"><svg><use href="#i-check"/></svg>Answers before you ask</li></ul>
+                      <span class="sp-btn">Book your call <svg><use href="#i-arrow"/></svg></span>
+                    </div>
+                    <div class="sp-cal">
+                      <span class="u-h">Pick a time</span>
+                      <div class="sp-days"><i>Mon</i><i>Tue</i><i>Wed</i><i class="sel" data-at=".42">Thu</i><i>Fri</i></div>
+                      <div class="sp-slots"><i>10:00</i><i>11:30</i><i>13:00</i><i>14:30</i><i class="sel" data-at=".52">16:00</i><i>17:30</i></div>
+                      <div class="sp-ok" data-at=".66"><i class="ck"><svg><use href="#i-check"/></svg></i><b>Booked</b><span>Thu · 16:00</span><span class="sm">Added to your calendar, with the lead's history</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- L7 CRM pipeline -->
+                <div class="scr" data-k="7" data-hops="4">
+                  <div class="l-head"><span class="u-h">Pipeline</span><span class="u-chip">Every lead, one place</span></div>
+                  <div class="pipe">
+                    <div class="pc"><b>New lead</b><i class="slot"></i><i class="cd"><i class="av" style="--c:#7E9A36">JR</i><i class="sk" style="--w:70%"></i><small>SCRIPT</small></i><i class="cd"><i class="av" style="--c:#3A6A8A">LT</i><i class="sk" style="--w:55%"></i><small>PLAN</small></i></div>
+                    <div class="pc"><b>Nurturing</b><i class="slot"></i><i class="cd"><i class="av" style="--c:#8A5A3A">AN</i><i class="sk" style="--w:62%"></i><small>Email 3</small></i><i class="cd"><i class="av" style="--c:#5A3A8A">DW</i><i class="sk" style="--w:48%"></i><small>Replied</small></i></div>
+                    <div class="pc"><b>Call booked</b><i class="slot"></i><i class="cd"><i class="av" style="--c:#2F7A5A">RS</i><i class="sk" style="--w:66%"></i><small>Fri 11:30</small></i></div>
+                    <div class="pc"><b>Proposal</b><i class="slot"></i><i class="cd"><i class="av" style="--c:#8A3A4A">EK</i><i class="sk" style="--w:58%"></i><small>Sent</small></i></div>
+                    <div class="pc"><b>Client</b><i class="slot"></i><i class="cd"><i class="av" style="--c:#6A7A2A">TB</i><i class="sk" style="--w:64%"></i><small>Onboarding</small></i></div>
+                    <div class="mover"><i class="av" style="--c:#C9A13A">MK</i><b>Maya K.</b><small>PLAN</small><span class="nx">Next step set</span></div>
+                  </div>
+                  <div class="pipe-bar"><i class="av" style="--c:#C9A13A">MK</i><span>Maya K. · from a Short</span><span>Keyword: PLAN</span><span>Next step: proposal follow-up</span></div>
+                </div>
+
+                <!-- L8 weekly report -->
+                <div class="scr" data-k="8">
+                  <div class="l-head"><span class="u-h">Weekly report</span><span class="u-chip">Every week, one page</span></div>
+                  <div class="rep">
+                    <div class="rep-chart">
+                      <div class="rep-lg"><span><i class="b"></i>Leads from content</span><span><i class="l"></i>Booked calls</span></div>
+                      <div class="bars"><i style="--h:.28;--i:0"></i><i style="--h:.34;--i:1"></i><i style="--h:.31;--i:2"></i><i style="--h:.45;--i:3"></i><i style="--h:.52;--i:4"></i><i style="--h:.61;--i:5"></i><i style="--h:.7;--i:6"></i><i style="--h:.86;--i:7"></i></div>
+                      <svg class="rep-line" viewBox="0 0 280 120" preserveAspectRatio="none"><path d="M17 104 L52 98 L87 100 L122 86 L157 78 L192 66 L227 52 L262 30"/></svg>
+                      <div class="wks"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span></div>
+                    </div>
+                    <div class="rep-side">
+                      <span class="u-h">What converted</span>
+                      <p data-at=".2"><svg class="ok"><use href="#i-check"/></svg>Short: “Stop pricing by the hour”</p>
+                      <p data-at=".3"><svg class="ok"><use href="#i-check"/></svg>Keyword: PLAN</p>
+                      <p data-at=".4"><svg class="ok"><use href="#i-check"/></svg>Email: “Want help putting this in place?”</p>
+                      <span class="u-h">What we change next</span>
+                      <p data-at=".55"><svg class="nx"><use href="#i-arrow"/></svg>New hook test on the pricing Short</p>
+                      <p data-at=".65"><svg class="nx"><use href="#i-arrow"/></svg>Call invite moves up to email 3</p>
+                      <p data-at=".75"><svg class="nx"><use href="#i-arrow"/></svg>New keyword: SCRIPT</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div></div>
+
+        <!-- ===== the phone ===== -->
+        <div class="dev ph"><div class="dev-in">
+          <div class="ph-body"><div class="ph-scr">
+            <i class="ph-island"></i>
+            <div class="ph-stat"><span>10:24</span><i></i></div>
+
+            <!-- P1 moments -->
+            <div class="scr" data-k="1">
+              <div class="p-top"><span class="u-h">From your long-form</span><b>Best moments</b></div>
+              <div class="p-src"><i class="p-th"><svg><use href="#i-play"/></svg></i><div><b>Full episode</b><span>Transcribed, scored, ranked</span></div></div>
+              <div class="p-mo" data-at=".47"><span class="rk">#1</span><q>Price the result, not the hour.</q><div class="tg"><i>Hook</i><i>Payoff</i></div></div>
+              <div class="p-mo" data-at=".18"><span class="rk">#2</span><q>The question I ask every new client.</q><div class="tg"><i>Story</i></div></div>
+              <div class="p-mo" data-at=".74"><span class="rk">#3</span><q>Why your first offer should be small.</q><div class="tg"><i>Myth</i><i>Hook</i></div></div>
+            </div>
+
+            <!-- P2 the Short -->
+            <div class="scr full" data-k="2">
+              <div class="sh">
+                <div class="sh-bg"><i class="sh-person"></i></div>
+                <div class="sh-prog"><i></i></div>
+                <div class="sh-hook" data-at=".02">3 pricing mistakes<br>costing you clients</div>
+                <div class="sh-caps"><span data-at="0" data-to=".34">Stop <b>pricing</b></span><span data-at=".34" data-to=".67">by the <b>hour.</b></span><span data-at=".67">Price the <b>result.</b></span></div>
+                <div class="sh-rail"><svg><use href="#i-heart"/></svg><svg><use href="#i-chat"/></svg><svg><use href="#i-send"/></svg></div>
+                <div class="sh-foot"><b>@yourbrand</b><span>Comment <small>PLAN</small> for the free guide</span></div>
+              </div>
+            </div>
+
+            <!-- P3 scheduled post -->
+            <div class="scr" data-k="3">
+              <div class="p-top"><span class="u-h">Scheduled post</span><b>Stop pricing by the hour</b></div>
+              <div class="cmp"><i class="cmp-th"><svg><use href="#i-play"/></svg></i><div><p>Most experts undercharge for one reason. Here's the fix.</p><p class="kw">Comment <b>PLAN</b> and I'll send you the free guide.</p></div></div>
+              <div class="chs">
+                <div class="ch" data-at=".12"><i class="d1"></i><span>Vertical feed<small>Own caption</small></span><b class="tog"></b></div>
+                <div class="ch" data-at=".26"><i class="d2"></i><span>Video search<small>Own title</small></span><b class="tog"></b></div>
+                <div class="ch" data-at=".4"><i class="d3"></i><span>Professional<small>Own cover</small></span><b class="tog"></b></div>
+              </div>
+              <div class="p-btn" data-at=".6"><svg><use href="#i-check"/></svg>Scheduled · Tue 18:30</div>
+            </div>
+
+            <!-- P4 comment → DM -->
+            <div class="scr" data-k="4">
+              <div class="dm-cm" data-at="0" data-to=".3">
+                <div class="p-top"><span class="u-h">Comments</span><b>Stop pricing by the hour</b></div>
+                <div class="cm"><i class="av" style="--c:#C9A13A">MK</i><p><b>maya.k</b>PLAN</p></div>
+                <div class="cm"><i class="av" style="--c:#3A6A8A">JR</i><p><b>jordan.r</b>this is exactly my problem</p></div>
+                <div class="cm"><i class="av" style="--c:#8A5A3A">SL</i><p><b>sam.l</b>PLAN</p></div>
+                <div class="cm"><i class="av" style="--c:#5A3A8A">AT</i><p><b>ana.t</b>PLAN please</p></div>
+                <div class="cm-hint"><svg><use href="#i-bolt"/></svg>Every “PLAN” gets the guide in DM</div>
+              </div>
+              <div class="dm-th" data-at=".3">
+                <div class="dm-hd"><i class="av" style="--c:#2F7A5A">YB</i><div><b>yourbrand</b><span>Messages</span></div></div>
+                <div class="bb us" data-at=".33">Here's the free guide you asked for.</div>
+                <div class="gift" data-at=".4"><i class="ic"><svg><use href="#i-gift"/></svg></i><div><b>The pricing guide</b><span>Free · yours to keep</span></div><small>Open</small></div>
+                <div class="bb us soft" data-at=".48">No follow needed. If it helps, you're welcome to follow for more.</div>
+                <div class="bb us" data-at=".58">Want the full version? Reply with your email and I'll send it.</div>
+                <div class="bb them" data-at=".7">maya@email.com</div>
+                <div class="bb us" data-at=".78">Sent. Check your inbox.</div>
+                <div class="cap-ok" data-at=".88"><svg><use href="#i-check"/></svg>Email captured · tagged PLAN</div>
+              </div>
+            </div>
+
+            <!-- P5 inbox -->
+            <div class="scr" data-k="5">
+              <div class="p-top"><span class="u-h">Inbox</span><b>Maya's inbox</b></div>
+              <div class="ib" data-at=".04"><i class="av" style="--c:#2F7A5A">YB</i><div><b>Your guide is inside</b><span>Start on page 2. That's where…</span></div><small class="ty w">Welcome</small></div>
+              <div class="ib" data-at=".22"><i class="av" style="--c:#2F7A5A">YB</i><div><b>The pricing mistake I made for years</b><span>For a long time I charged…</span></div><small class="ty n">Nurture</small></div>
+              <div class="ib" data-at=".4"><i class="av" style="--c:#2F7A5A">YB</i><div><b>What a client asked me last week</b><span>She asked a question I hear…</span></div><small class="ty n">Nurture</small></div>
+              <div class="ib" data-at=".58"><i class="av" style="--c:#2F7A5A">YB</i><div><b>Why I stopped selling my hours</b><span>Here's what changed when…</span></div><small class="ty n">Story</small></div>
+              <div class="ib new" data-at=".76"><i class="av" style="--c:#2F7A5A">YB</i><div><b>Want help putting this in place?</b><span>If you'd like a hand, here's…</span></div><small class="ty i">Invitation</small></div>
+            </div>
+
+            <!-- P6 booking -->
+            <div class="scr" data-k="6">
+              <div class="p-top"><span class="u-h">yourbrand.com</span><b>Book your call</b></div>
+              <div class="bk-days"><i>Mon</i><i>Tue</i><i>Wed</i><i class="sel" data-at=".42">Thu</i><i>Fri</i></div>
+              <div class="bk-slots"><i>10:00</i><i>13:00</i><i class="sel" data-at=".52">16:00</i><i>17:30</i></div>
+              <div class="bk-ok" data-at=".66"><i class="ck"><svg><use href="#i-check"/></svg></i><b>You're booked</b><span>Thu · 16:00</span><span class="sm">Confirmation and reminders are on the way.</span></div>
+            </div>
+
+            <!-- P7 lead history -->
+            <div class="scr" data-k="7">
+              <div class="ld-hd"><i class="av" style="--c:#C9A13A">MK</i><div><b>Maya K.</b><span>Source: Short · keyword PLAN</span></div><small class="st-lead" data-at="0" data-to=".86">Lead</small><small class="st-client" data-at=".86">Client</small></div>
+              <ol class="ld-tl">
+                <li data-at=".02"><svg><use href="#i-play"/></svg>Watched “Stop pricing by the hour”</li>
+                <li data-at=".14"><svg><use href="#i-chat"/></svg>Commented PLAN</li>
+                <li data-at=".26"><svg><use href="#i-gift"/></svg>Got the guide in DM</li>
+                <li data-at=".38"><svg><use href="#i-mail"/></svg>Joined the email list</li>
+                <li data-at=".5"><svg><use href="#i-mail"/></svg>Opened “Want help…?”</li>
+                <li data-at=".62"><svg><use href="#i-cal"/></svg>Booked a call</li>
+                <li data-at=".74"><svg><use href="#i-page"/></svg>Proposal sent</li>
+                <li class="win" data-at=".86"><svg><use href="#i-check"/></svg>Became a client</li>
+              </ol>
+            </div>
+
+            <!-- P8 weekly summary -->
+            <div class="scr" data-k="8">
+              <div class="p-top"><span class="u-h">Weekly report</span><b>Your week, on one page</b></div>
+              <div class="rp-mini"><i style="--h:.3;--i:0"></i><i style="--h:.36;--i:1"></i><i style="--h:.34;--i:2"></i><i style="--h:.48;--i:3"></i><i style="--h:.56;--i:4"></i><i style="--h:.68;--i:5"></i><i style="--h:.88;--i:6"></i></div>
+              <p class="rp-li" data-at=".2"><svg class="ok"><use href="#i-check"/></svg>Top Short: “Stop pricing by the hour”</p>
+              <p class="rp-li" data-at=".32"><svg class="ok"><use href="#i-check"/></svg>Best keyword: PLAN</p>
+              <p class="rp-li" data-at=".55"><svg class="nx"><use href="#i-arrow"/></svg>Next: new hook test</p>
+              <p class="rp-li" data-at=".66"><svg class="nx"><use href="#i-arrow"/></svg>Next: call invite in email 3</p>
+            </div>
+
+          </div></div>
+        </div></div>
+
+        <!-- ===== the system map: builds itself as you scroll ===== -->
+        <div class="map">
+          <i class="map-line"><i class="map-fill"></i></i>
+          <i class="map-run"></i>
+          <ol class="map-nodes">
+            <li style="--n:0"><i></i><span>Moments</span></li><li style="--n:1"><i></i><span>Shorts</span></li><li style="--n:2"><i></i><span>Posting</span></li><li style="--n:3"><i></i><span>DM funnel</span></li>
+            <li style="--n:4"><i></i><span>Emails</span></li><li style="--n:5"><i></i><span>Booking</span></li><li style="--n:6"><i></i><span>CRM</span></li><li style="--n:7"><i></i><span>Numbers</span></li>
+          </ol>
+          <svg class="map-loop" viewBox="0 0 700 46" preserveAspectRatio="none"><path d="M700 4 C700 40 660 42 600 42 L100 42 C40 42 0 40 0 4"/></svg>
+          <span class="map-loop-t"><svg><use href="#i-loop"/></svg>The numbers decide what we mine next</span>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- the words: one block per stage, read at your own pace -->
+    <div class="st-col">
+      <article class="st" data-lead="laptop" data-name="Moments">
+        <p class="st-k"><b>01</b>Moments</p>
+        <h3>We mine your best moments.</h3>
+        <p>Your podcasts, webinars, lives and talks already hold the content. We go through every long-form recording, line by line. Each moment is scored for hook, story and payoff, and checked against the offer you sell. Only the moments that can stop a stranger mid-scroll make the cut.</p>
+        <ul><li>A full transcript and timeline of every recording</li><li>Moments ranked for hook, story and payoff</li><li>Every pick tied to a topic your buyers care about</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>The strongest moments go straight to the edit.</p>
+      </article>
+      <article class="st" data-lead="phone" data-name="Shorts">
+        <p class="st-k"><b>02</b>Shorts</p>
+        <h3>We craft Shorts that stop the scroll.</h3>
+        <p>Every Short is built for the first two seconds. We cut the hook to the front, re-frame you for vertical, and pace the captions word by word. Then the polish: motion graphics, b-roll, sound design, and a clean end card with one clear call to action.</p>
+        <ul><li>Hook-first edit, re-framed for vertical</li><li>Captions, motion graphics and sound design</li><li>One call to action that points into your funnel</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>Every Short ships with a keyword that starts the funnel.</p>
+      </article>
+      <article class="st" data-lead="laptop" data-name="Posting">
+        <p class="st-k"><b>03</b>Posting</p>
+        <h3>We post natively, everywhere.</h3>
+        <p>Each Short goes out as if it was made for that platform alone. Its own caption. Its own cover. Its own time slot. We plan the calendar around your offer, so every week of content builds toward the thing you sell, not just toward views.</p>
+        <ul><li>A content calendar planned around your offer</li><li>Platform-native captions, covers and timing</li><li>A keyword call to action on every post</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>Viewers who want more comment the keyword.</p>
+      </article>
+      <article class="st" data-lead="phone" data-name="DM funnel">
+        <p class="st-k"><b>04</b>DM funnel</p>
+        <h3>The DM keyword funnel.</h3>
+        <p>A viewer comments one word. Seconds later, a message lands in their inbox with the free gift they asked for. Everyone who asks gets it. No hoops, and no follow required: we invite the follow, we never make it a condition. Then one question: “Want the full version?” One reply with their email, and a viewer becomes a lead you own.</p>
+        <ul><li>A keyword triggers an instant DM with the gift</li><li>The gift goes to everyone. The follow is invited, never required.</li><li>One question turns the chat into a captured email</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>Every email is tagged with what they asked for.</p>
+      </article>
+      <article class="st" data-lead="laptop" data-name="Emails">
+        <p class="st-k"><b>05</b>Emails</p>
+        <h3>The email engine.</h3>
+        <p>The moment an email lands, the sequence starts. A welcome that delivers on the promise. A run of nurture emails that teach, tell stories and answer the doubts people have before they buy. Then a clear invitation to the next step. Every lead is segmented by what they asked for, so each one hears about the thing they actually want.</p>
+        <ul><li>Welcome, nurture and invitation emails, written for you</li><li>Segments by keyword, topic and interest</li><li>Each email moves the reader one step closer to a call</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>The invitation points to one page and one calendar.</p>
+      </article>
+      <article class="st" data-lead="laptop" data-name="Booking">
+        <p class="st-k"><b>06</b>Booking</p>
+        <h3>The sales page and the booking.</h3>
+        <p>Readers land on a page built to answer their questions before they ask them: who it's for, what changes, how it works, what happens next. One button. One calendar. A booked slot drops straight into your schedule, with confirmations and reminders sent for you, and the lead's full story attached.</p>
+        <ul><li>A sales page written and built around your offer</li><li>A booking calendar connected to your schedule</li><li>Confirmations and reminders, sent automatically</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>Every booking lands in your CRM, with its history.</p>
+      </article>
+      <article class="st" data-lead="laptop" data-name="CRM">
+        <p class="st-k"><b>07</b>CRM</p>
+        <h3>Your CRM, built around how you sell.</h3>
+        <p>One place for every lead, conversation, call and sale. Each person carries their whole story: the Short they watched, the word they commented, the emails they opened, the call they booked. Every card has a next step and an owner, so nothing waits in an inbox and nobody slips through the cracks.</p>
+        <ul><li>A pipeline shaped around your sales process</li><li>The full history of every lead, from first view to sale</li><li>A next step on every card, so follow-ups happen</li></ul>
+        <p class="st-next"><svg><use href="#i-arrow"/></svg>Every stage feeds the weekly numbers.</p>
+      </article>
+      <article class="st" data-lead="laptop" data-name="Numbers">
+        <p class="st-k"><b>08</b>Numbers</p>
+        <h3>Weekly numbers. Weekly changes.</h3>
+        <p>Every week you get one clear report. Which Shorts pulled leads. Which keywords converted. Which emails got replies. How many calls were booked, and how many became clients. Then the part that matters: what we change next week, and why. The system never sits still. We keep tuning it, week after week.</p>
+        <ul><li>A one-page weekly report, in plain words</li><li>What converted, from first view to sale</li><li>A short list of changes for next week, then we make them</li></ul>
+        <p class="st-next"><svg><use href="#i-loop"/></svg>The winners shape what we mine next. The loop starts again.</p>
+      </article>
+    </div>
+  </div>
+  <div class="wrap"><p class="sys-note">Screens are illustrations. Every system is built around your offer and the tools you already use.</p></div>
+</section>
+
+<!-- ============ WHAT WE BUILD AND RUN ============ -->
+<section class="act" id="build"><div class="wrap">
+  <div class="head">
+    <p class="eyebrow rv">What we build and run</p>
+    <h2 class="split">Six parts. One <em>machine.</em></h2>
+    <p class="lede rv">Each part is built to hand the lead to the next one. Most teams only build one piece. We build all six, connect them, and run them.</p>
+  </div>
+  <div class="parts">
+    <article class="card part rv">
+      <div class="part-top"><span class="part-n">01</span><i class="part-ic"><svg><use href="#i-cut"/></svg></i></div>
+      <h3>Content engine</h3>
+      <p class="part-is">The strategy and production line that turns what you know into short-form content that sells your offer.</p>
+      <dl><div><dt>What we do</dt><dd>Content strategy around your offer. Moment mining from your long-form. Editing, captions, motion graphics and sound. Native posting on every platform.</dd></div>
+      <div><dt>What you get</dt><dd>A steady stream of Shorts with a job to do. Each one points into your funnel.</dd></div></dl>
+    </article>
+    <article class="card part rv" style="--i:1">
+      <div class="part-top"><span class="part-n">02</span><i class="part-ic"><svg><use href="#i-gift"/></svg></i></div>
+      <h3>Lead capture</h3>
+      <p class="part-is">The bridge from a viewer to a lead you own: a gift worth asking for, and every path to claim it.</p>
+      <dl><div><dt>What we do</dt><dd>Create the lead magnet (a guide, checklist or training). Build the DM keyword funnel and the sign-up pages.</dd></div>
+      <div><dt>What you get</dt><dd>Viewers turning into emails and contacts, not just likes.</dd></div></dl>
+    </article>
+    <article class="card part rv" style="--i:2">
+      <div class="part-top"><span class="part-n">03</span><i class="part-ic"><svg><use href="#i-mail"/></svg></i></div>
+      <h3>Email sequences</h3>
+      <p class="part-is">The conversation that keeps going after someone signs up, in your voice.</p>
+      <dl><div><dt>What we do</dt><dd>Write and set up welcome, nurture and sales sequences, segmented by what each lead asked for.</dd></div>
+      <div><dt>What you get</dt><dd>Leads who know you, trust you, and know exactly how to buy.</dd></div></dl>
+    </article>
+    <article class="card part rv">
+      <div class="part-top"><span class="part-n">04</span><i class="part-ic"><svg><use href="#i-page"/></svg></i></div>
+      <h3>Sales pages and booking</h3>
+      <p class="part-is">The place where interest turns into a decision.</p>
+      <dl><div><dt>What we do</dt><dd>Write, design and build the sales page. Connect your calendar and booking flow. Tune both as the numbers come in.</dd></div>
+      <div><dt>What you get</dt><dd>A page and a calendar built to turn readers into booked calls and buyers.</dd></div></dl>
+    </article>
+    <article class="card part rv" style="--i:1">
+      <div class="part-top"><span class="part-n">05</span><i class="part-ic"><svg><use href="#i-board"/></svg></i></div>
+      <h3>CRM build</h3>
+      <p class="part-is">One home for every lead, client and sale, built around how you sell.</p>
+      <dl><div><dt>What we do</dt><dd>Design the pipeline around your sales process. Connect every source. Set up next steps and the views your team will use every day.</dd></div>
+      <div><dt>What you get</dt><dd>You always know who is where, what happens next, and where the money is.</dd></div></dl>
+    </article>
+    <article class="card part rv" style="--i:2">
+      <div class="part-top"><span class="part-n">06</span><i class="part-ic"><svg><use href="#i-chart"/></svg></i></div>
+      <h3>Weekly reports and optimisation</h3>
+      <p class="part-is">The feedback loop that keeps the whole system sharp.</p>
+      <dl><div><dt>What we do</dt><dd>Track the path from first view to sale. Report every week. Ship the changes the numbers call for.</dd></div>
+      <div><dt>What you get</dt><dd>Clear numbers, clear decisions, and a system that is tuned every week.</dd></div></dl>
+    </article>
+  </div>
+</div></section>
+
+<!-- ============ WITH YOU / FOR YOU ============ -->
+<section class="split-band"><div class="wrap">
+  <div class="sb">
+    <div class="sb-side rv">
+      <span class="eyebrow">Done with you</span>
+      <h3>The strategy, <em>with you.</em></h3>
+      <p>We sit with you on the offer, the audience and the plan. You bring the expertise and make the big calls. We bring the system thinking, the structure and the questions that sharpen it.</p>
+      <ul><li>Offer and audience mapping</li><li>The one-page plan of your system</li><li>Monthly reviews on where to push next</li></ul>
+    </div>
+    <div class="sb-side rv" style="--i:1">
+      <span class="eyebrow">Done for you</span>
+      <h3>The execution, <em>for you.</em></h3>
+      <p>Editing, posting, funnels, emails, pages, CRM and reporting, built and run by one team. You stay on the work only you can do: the calls, the clients, the content you love making.</p>
+      <ul><li>Every part built, connected and tested</li><li>Run day to day by our team</li><li>Tuned every week from the numbers</li></ul>
+    </div>
+  </div>
+  <div class="answers why">
+    <div class="answer rv"><h2>Why one team for the whole system?</h2><p>Most experts hire an editor, a copywriter, a funnel builder and someone for the CRM. Each one does their part, and the leads fall through the gaps between them. We build every part to fit the next one, run it, and report on all of it every week. One team, one plan, one set of numbers.</p></div>
+  </div>
+</div></section>
+
+<!-- ============ HOW AN ENGAGEMENT RUNS ============ -->
+<section class="act" id="engagement"><div class="wrap">
+  <div class="head">
+    <p class="eyebrow rv">How an engagement runs</p>
+    <h2 class="split">From first call to a system that <em>runs.</em></h2>
+    <p class="lede rv">A clear path, in stages. The first parts go live early, so the system starts working while the rest is being built.</p>
+  </div>
+  <ol class="eng" id="eng">
+    <i class="eng-line"><i></i></i>
+    <li class="rv"><i class="eng-dot"></i><span class="eng-n">01</span><h3>Map call</h3><p>We walk through how people find you, sign up and buy today, and find exactly where they drop off.</p><p class="eng-get"><b>You get</b>A clear view of your funnel, leaks included.</p></li>
+    <li class="rv" style="--i:1"><i class="eng-dot"></i><span class="eng-n">02</span><h3>One-page plan</h3><p>Your whole system on a single page: what we build, in what order, and why that order.</p><p class="eng-get"><b>You get</b>The map of your system, ready to approve.</p></li>
+    <li class="rv" style="--i:2"><i class="eng-dot"></i><span class="eng-n">03</span><h3>Build sprints</h3><p>We build in focused stages, starting with the part that leaks the most. Each stage goes live as soon as it's ready.</p><p class="eng-get"><b>You get</b>Working parts, live early.</p></li>
+    <li class="rv"><i class="eng-dot"></i><span class="eng-n">04</span><h3>Launch</h3><p>Content, funnel, emails, pages and CRM, connected end to end. We test every path before real leads touch it.</p><p class="eng-get"><b>You get</b>One connected, tested system.</p></li>
+    <li class="rv" style="--i:1"><i class="eng-dot"></i><span class="eng-n">05</span><h3>Weekly optimisation</h3><p>Every week we read the numbers, ship changes, and tell you what we changed and why.</p><p class="eng-get"><b>You get</b>A weekly report and a sharper system.</p></li>
+    <li class="rv" style="--i:2"><i class="eng-dot"></i><span class="eng-n">06</span><h3>Monthly review</h3><p>Once a month we step back with you: what's working, what's next, and where to push harder.</p><p class="eng-get"><b>You get</b>Direction for the month ahead.</p></li>
+  </ol>
+</div></section>
+
+<!-- ============ WHO IT'S FOR ============ -->
+<section class="act" id="fit"><div class="wrap cols">
+  <div class="head stick"><p class="eyebrow rv">Who it's for</p><h2 class="split">Built for experts with an <em>offer.</em></h2><p class="lede rv">You already sell something people pay for. You want more of the right people to buy it, without running the machine yourself.</p></div>
   <div class="list small rv">
-    <div class="item plain rv"><h3>Content engine</h3><p>Content strategy, Shorts and posting across your socials, planned around the offer you sell.</p></div>
-    <div class="item plain rv"><h3>Lead capture</h3><p>A free resource your audience wants and a sign-up page, so viewers become leads you own.</p></div>
-    <div class="item plain rv"><h3>Email sequences</h3><p>Welcome, nurture and sales emails that bring new leads to a call or a purchase.</p></div>
-    <div class="item plain rv"><h3>Sales pages and booking</h3><p>We tune your sales page and booking flow, so more visitors take the next step.</p></div>
-    <div class="item plain rv"><h3>CRM build</h3><p>One place for every lead, client and sale, built around how you sell. No more digging through inboxes.</p></div>
-    <div class="item plain rv"><h3>Weekly reports</h3><p>What came in, what turned into sales, and what we change next week.</p></div>
+    <div class="item plain rv"><h3>Coaches and experts</h3><p>You sell a program or coaching. The system fills your calendar with calls from people who already know your thinking.</p></div>
+    <div class="item plain rv"><h3>Course creators</h3><p>Your course is built. The system brings buyers to it, week after week, from content they found on their own.</p></div>
+    <div class="item plain rv"><h3>Creators with an offer</h3><p>You have the audience. We build the path from a view to a sale, and run it for you.</p></div>
+    <div class="item plain rv"><h3>Service businesses</h3><p>You sell high-value work. We turn your expertise into content that brings the right calls.</p></div>
   </div>
 </div></section>
 
-<section><div class="wrap">
-  <div class="answers">
-    <div class="answer rv"><h2>Why one team for the whole system?</h2><p>Most experts hire an editor, a copywriter, a funnel builder and someone for the CRM. Each one does their part, and the leads fall through the gaps between them. We build every part to fit the next one, run it, and report on it every week.</p></div>
-    <div class="answer rv" style="--i:1"><h2>Do you run this yourselves?</h2><p>Yes. Our own studio runs on the same kind of system: content, outreach, one CRM for every lead, client and sale, and weekly numbers. We build for you what we use ourselves.</p></div>
+<!-- ============ PROOF ============ -->
+<section class="proof"><div class="wrap">
+  <div class="pf rv">
+    <i class="pf-ic"><svg><use href="#i-loop"/></svg></i>
+    <p class="pf-q">We build for you what we <em>run for ourselves.</em></p>
+    <div class="pf-cols">
+      <p><b>Our own studio runs on it.</b> Content, outreach, one CRM for every lead, client and sale, and weekly numbers. The same kind of system we build for you.</p>
+      <p><b>Worked with creators and brands.</b> We've worked with Sam Zia's team and <i class="based">BASED</i>.</p>
+    </div>
   </div>
 </div></section>
 
-<section class="act" id="how"><div class="wrap">
-  <div class="head"><h2 class="split">From first call to a running system.</h2></div>
-  <div class="steps">
-    <div class="card step rv"><h3>A call to map your funnel</h3><p>We go through how people find you, sign up and buy today, and where they drop off.</p></div>
-    <div class="card step rv" style="--i:1"><h3>A one-page plan</h3><p>You get a map of your system: what we build first, what comes next, and why.</p></div>
-    <div class="card step rv" style="--i:2"><h3>Build, run, improve</h3><p>We build in stages, so the first parts go live early. Then we run it and improve it every week.</p></div>
-  </div>
-</div></section>
-
-<section class="act"><div class="wrap cols">
-  <div class="head stick"><h2 class="split">Who it's for.</h2><p class="lede rv">Experts with a proven offer who want more of the right people to buy it.</p></div>
-  <div class="list small rv">
-    <div class="item plain rv"><h3>Coaches and experts</h3><p>You sell a program or coaching, and you want a steady flow of booked calls.</p></div>
-    <div class="item plain rv"><h3>Course creators</h3><p>Your course is built. The system brings buyers to it.</p></div>
-    <div class="item plain rv"><h3>Creators with an offer</h3><p>You have the audience. We build the path from content to sale.</p></div>
-    <div class="item plain rv"><h3>Service businesses</h3><p>You sell high-value work. We fill your calendar with the right calls.</p></div>
-  </div>
-</div></section>
-
+<!-- ============ FAQ ============ -->
 <section id="faq"><div class="wrap cols">
   <div class="head stick"><h2 class="split">Questions.</h2></div>
   <div class="faq rv">
     <details open><summary>How much does it cost?</summary><p>Every system is quoted after a call. The price depends on what we build, how much content it needs and which tools you already use.</p></details>
+    <details><summary>What do you need from me?</summary><p>Your long-form content (podcasts, webinars, lives or talks), access to the tools you use, and your say on the plan. We handle the rest, and check in with you on the big calls.</p></details>
     <details><summary>Which tools do you use?</summary><p>We build on what you already use where we can, for example your course platform or your email tool. If you have nothing yet, we set it up for you.</p></details>
     <details><summary>Can I start with one part?</summary><p>Yes. Many clients start with the part that leaks the most, then add the rest. The map from the first call shows where to start.</p></details>
+    <details><summary>Do people have to follow me to get the free gift?</summary><p>No. Everyone who comments the keyword gets the gift. We invite a follow in the message, but it is never a condition. That keeps the funnel within platform rules, and it feels better for the person asking.</p></details>
+    <details><summary>Do you work with health and wellness experts?</summary><p>Yes. We keep every word within what your field allows: no clinical claims and no promised outcomes. You review anything sensitive before it goes out.</p></details>
     <details><summary>Is my data kept private?</summary><p>Yes. Your content, your leads and your customer data stay yours. Access is shared only with the people who build your system.</p></details>
     <details><summary>How do I start?</summary><p><a href="https://cal.com/beju-creative/15min-call">Book a call</a>. We map your funnel together and tell you what we would build first.</p></details>
   </div>
@@ -98,6 +603,7 @@
 
 <section class="close"><div class="wrap">
   <h2 class="split">Your offer is ready. Let's build <em>the system.</em></h2>
+  <p class="lede rv close-lede">Fifteen minutes to map your funnel: where leads come from, where they drop off, and what we would build first.</p>
   <div class="row rv"><a class="btn primary" href="https://cal.com/beju-creative/15min-call" data-magnet>Book a call to map your funnel</a></div>
 </div></section></main>
 
@@ -108,5 +614,6 @@
 <script src="/logo-data.js"></script>
 <script src="/base.js"></script>
 <script src="/pages.js"></script>
+<script src="/system.js"></script>
 </body>
 </html>
